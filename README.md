@@ -37,3 +37,23 @@ Output 2:
 
 ## 二、文法设计
 
+program → decls stmts .
+
+decls → decls decl | e
+
+decl → **type** **id** ;
+
+stmts → stmts stmt | e
+
+stmt → **id** = expr ;
+
+| **write( id )** ;
+
+expr → expr + term | expr - term | term
+
+term → term * factor | term / factor | factor
+
+factor → (expr) | **num** | **real** |  **id**
+
+
+
