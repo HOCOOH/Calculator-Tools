@@ -1,0 +1,4 @@
+float a; 
+int b; 
+b = a * 2 - a / 2;
+write(b);.

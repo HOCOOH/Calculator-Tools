@@ -1,37 +1,32 @@
-#include "Calculator.h"
-#include "Functions.h"
 #include "Lexer.h"
+#include "Parser.h"
 
-wordTable words = {{NULL}, 0};
+#define CODE_MAX 500    // 源代码最大长度
 
 char* peek = NULL;
+extern Token* look;
+extern IdTable ids;
 
-int main() 
-{
-    FILE* fp = fopen("../test2.txt", "r");
+int main() {
+    FILE* fp = fopen("../test1.txt", "r");
     if (fp == NULL) {
         fprintf(stderr, "ERROR: Failed to open file\n");
         exit(1);
     }
+    // 读取源代码存放至code
     char* code = (char*)calloc(CODE_MAX, sizeof(char));
+    CheckAllocation(code);
     peek = code;
     char ch = '\0';
     while ((ch = fgetc(fp)) != EOF) {
         *peek++ = ch;
     }
     fclose(fp);
-
     // 开始分析
     peek = code;
-    while (*peek != '\0') {
-        Token* tmp = Scan();
-        if (tmp->Tag >= 256)
-            printf("%3d %d %f %s\n", tmp->Tag, tmp->value, tmp->valueReal, tmp->lexeme);
-        else
-            printf("%3c %d %f %s\n", tmp->Tag, tmp->value, tmp->valueReal, tmp->lexeme);
-    }
+    Parser();
 
+    DeleteIdTable();
     free_s(code);
     return 0;
 }
-

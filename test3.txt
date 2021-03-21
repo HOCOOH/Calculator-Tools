@@ -1,0 +1,10 @@
+float assign;
+int ppp;
+assign = 6 + 2.33 * 1.11 - (2 * 3 + 4);
+write(assign);
+ppp = assign + 5;
+write(ppp);
+ppp = 2 * 33;
+write(ppp);
+write(123);
+ppp = 2 / 0.0;

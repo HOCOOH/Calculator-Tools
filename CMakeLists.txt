@@ -1,5 +1,5 @@
 # CMake 最低版本号要求
-cmake_minimum_required(VERSION 2.8.0)
+cmake_minimum_required(VERSION 2.9.0)
 
 # 项目信息
 project(Calculator-Tools)
@@ -8,4 +8,4 @@ project(Calculator-Tools)
 aux_source_directory(. DIR_SRCS)
 
 # 指定生成目标
-add_executable(main ${DIR_SRCS})
+add_executable(Calculator ${DIR_SRCS})

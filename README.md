@@ -9,7 +9,7 @@ Homework of course: Compilers Principles
 Input 1:
 float a; int b; 
 a = (10.44*356+1.28) / 2 + 1024 * 1.6;
-b = a * 2 – a/2;
+b = a * 2 - a/2;
 write(b);
 write(a).
 Output 1:
@@ -22,7 +22,7 @@ Input 2:
 float a; 
 int b; 
 a = (10.44*356+1.28) / 2 + 1024 * 1.6;
-b = a * 2 – c/2;
+b = a * 2 - c/2;
 write(b).
 Output 2:
    Error(line 4): undefined identifier . 
@@ -39,11 +39,11 @@ Output 2:
 
 program → decls stmts .
 
-decls → decls decl | e
+decls → decls decl | ε
 
 decl → **type** **id** ;
 
-stmts → stmts stmt | e
+stmts → stmts stmt | ε
 
 stmt → **id** = expr ;
 
@@ -53,7 +53,23 @@ expr → expr + term | expr - term | term
 
 term → term * factor | term / factor | factor
 
-factor → (expr) | **num** | **real** |  **id**
+factor → (expr) | **num** | **real** | **id**
+
+
+
+消除左递归：
+
+decls → decl r1
+
+r1 → decl | ε
+
+
+
+expr → term r1
+
+r1 → + term | - term | ε
+
+
 
 
 
