@@ -8,7 +8,7 @@ extern Token* look;
 extern IdTable ids;
 
 int main() {
-    FILE* fp = fopen("../test1.txt", "r");
+    FILE* fp = fopen("../test4.txt", "r");
     if (fp == NULL) {
         fprintf(stderr, "ERROR: Failed to open file\n");
         exit(1);

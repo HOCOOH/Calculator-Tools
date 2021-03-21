@@ -15,7 +15,7 @@ void Parser() {
 }
 /* ----------------------------------------------------------------
 decls → decls decl | ε
-decl → type id ; | type id = factor ;
+decl → type id ; | type id = expr ;
 ---------------------------------------------------------------- */
 void decls() {
     while (look->tag == INT || look->tag == FLOAT) {
@@ -29,13 +29,17 @@ void decls() {
             look->tag = NUM;
         else
             look->tag = REAL;
+        Token* left = look;
         Scan();
-        match(';');
+        if (look->tag == '=')
+            Assign(left);
+        else
+            match(';');
     }
 }
 /* ----------------------------------------------------------------
 stmts → stmts stmt | ε
-stmt → id = expr ; | write( id ) ;
+stmt → id = expr ; | write ( expr ) ;
 ---------------------------------------------------------------- */
 void stmts() {
     while (look->isID == true || look->tag == WRITE) {
@@ -43,7 +47,7 @@ void stmts() {
         if (look->tag == WRITE) {
             Scan();
             match('(');
-            Token tmp = factor();
+            Token tmp = expr();
             if (tmp.tag == NUM)
                 printf("%d\n", tmp.value);
             else
@@ -59,18 +63,7 @@ void stmts() {
         }
         Token* left = look;
         Scan();
-        match('=');
-        Token tmp = expr();
-        if (left->tag == tmp.tag) {
-            left->value = tmp.value;
-            left->valueReal = tmp.valueReal;
-        }
-        else if (left->tag = NUM)  // 左式和右式不是同一类型
-            left->value = (int)tmp.valueReal;
-        else
-            left->valueReal = (double)tmp.value;
-        left->isAssigned = true;
-        match(';');
+        Assign(left);
     }
 }
 /* ----------------------------------------------------------------
@@ -182,4 +175,20 @@ void match(int tar) {
         fprintf(stderr, "ERROR(line %d): expected \'%c\'", line, (char)tar);
         exit(1);
     }
+}
+
+// left = expr ;
+void Assign(Token* left) {
+    match('=');
+    Token tmp = expr();
+    if (left->tag == tmp.tag) {
+        left->value = tmp.value;
+        left->valueReal = tmp.valueReal;
+    }
+    else if (left->tag = NUM)  // 左式和右式不是同一类型
+        left->value = (int)tmp.valueReal;
+    else
+        left->valueReal = (double)tmp.value;
+    left->isAssigned = true;
+    match(';');
 }

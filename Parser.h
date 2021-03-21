@@ -9,12 +9,12 @@ program → decls stmts
 void Parser();
 /* ----------------------------------------------------------------
 decls → decls decl | ε
-decl → type id ;
+decl → type id ; | type id = expr ;
 ---------------------------------------------------------------- */
 void decls();
 /* ----------------------------------------------------------------
 stmts → stmts stmt | ε
-stmt → id = expr ; | write( id ) ;
+stmt → id = expr ; | write ( expr ) ;
 ---------------------------------------------------------------- */
 void stmts();
 /* ----------------------------------------------------------------
@@ -31,5 +31,7 @@ factor → (expr) | num | real | id
 Token factor();
 // 匹配一个单字符Token
 void match(int tag);
+// left = expr ;
+void Assign(Token* left);
 
 #endif
