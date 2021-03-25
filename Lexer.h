@@ -13,11 +13,11 @@
 #define ID_MAX 50   // 标识符最大数量
 
 // 标识符宏定义
-#define NUM 256
-#define REAL 257
-#define WRITE 258
-#define INT 259
-#define FLOAT 260
+#define INT 256         // 整数类型
+#define FLOAT 257       // 浮点数类型
+#define WRITE 258       // 写指令
+#define INT_DECL 259    // 整型定义
+#define FLOAT_DECL 260  // 浮点型定义
 
 // Token定义
 typedef struct {

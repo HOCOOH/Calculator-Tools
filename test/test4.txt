@@ -1,0 +1,8 @@
+float aaa123 = 3.14159; 
+int bbb123 = 2 * aaa123; 
+float ccc123;
+ccc123 = aaa123 / bbb123;
+write(2 * 3);
+write(aaa123);
+write(bbb123);
+write(ccc123);.

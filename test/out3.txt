@@ -1,0 +1,5 @@
+-1.413700
+3
+66
+123
+ERROR(line 10): the divisor is zero

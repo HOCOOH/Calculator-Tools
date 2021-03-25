@@ -1,6 +1,7 @@
 #include "Parser.h"
 
 Token* look = NULL;
+extern FILE* dest;
 extern int line;
 extern IdTable ids;
 
@@ -18,17 +19,17 @@ decls → decls decl | ε
 decl → type id ; | type id = expr ;
 ---------------------------------------------------------------- */
 void decls() {
-    while (look->tag == INT || look->tag == FLOAT) {
+    while (look->tag == INT_DECL || look->tag == FLOAT_DECL) {
         int flag = look->tag;
         Scan();
         if (look->isID == false) {
-            fprintf(stderr, "ERROR(line %d): expected identifier after type declaration", line);
+            fprintf(dest, "ERROR(line %d): expected identifier after type declaration", line);
             exit(1);
         }
-        if (flag == INT)
-            look->tag = NUM;
+        if (flag == INT_DECL)
+            look->tag = INT;
         else
-            look->tag = REAL;
+            look->tag = FLOAT;
         Token* left = look;
         Scan();
         if (look->tag == '=')
@@ -48,17 +49,17 @@ void stmts() {
             Scan();
             match('(');
             Token tmp = expr();
-            if (tmp.tag == NUM)
-                printf("%d\n", tmp.value);
+            if (tmp.tag == INT)
+                fprintf(dest, "%d\n", tmp.value);
             else
-                printf("%f\n", tmp.valueReal);
+                fprintf(dest, "%f\n", tmp.valueReal);
             match(')');
             match(';');
             continue;
         }
         // assign
-        if (look->tag != NUM && look->tag != REAL) {
-            fprintf(stderr, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
+        if (look->tag != INT && look->tag != FLOAT) {
+            fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
             exit(1);
         }
         Token* left = look;
@@ -79,9 +80,9 @@ Token expr() {
                 left.value += right.value;
                 left.valueReal += right.valueReal;
             }
-            else if (left.tag == NUM)  {
+            else if (left.tag == INT)  {
                 double tmp = (double)left.value;
-                left = (Token){REAL, 0, tmp + right.valueReal, NULL, false, false};
+                left = (Token){FLOAT, 0, tmp + right.valueReal, NULL, false, false};
             }
             else
                 left.valueReal += (double)right.value;
@@ -93,9 +94,9 @@ Token expr() {
                 left.value -= right.value;
                 left.valueReal -= right.valueReal;
             }
-            else if (left.tag == NUM)  {
+            else if (left.tag == INT)  {
                 double tmp = (double)left.value;
-                left = (Token){REAL, 0, tmp - right.valueReal, NULL, false, false};
+                left = (Token){FLOAT, 0, tmp - right.valueReal, NULL, false, false};
             }
             else
                 left.valueReal -= (double)right.value;
@@ -116,9 +117,9 @@ Token term() {
                 left.value *= right.value;
                 left.valueReal *= right.valueReal;
             }
-            else if (left.tag == NUM)  {
+            else if (left.tag == INT)  {
                 double tmp = (double)left.value;
-                left = (Token){REAL, 0, tmp * right.valueReal, NULL, false, false};
+                left = (Token){FLOAT, 0, tmp * right.valueReal, NULL, false, false};
             }
             else
                 left.valueReal *= (double)right.value;
@@ -126,17 +127,17 @@ Token term() {
         else if (look->tag == '/') {
             match('/');
             Token right = factor();
-            if ((right.tag == NUM && right.value == 0) || (right.tag == REAL && fabs(right.valueReal) < 0.0001)) {
-                fprintf(stderr, "ERROR(line %d): the divisor is zero", line);
+            if ((right.tag == INT && right.value == 0) || (right.tag == FLOAT && fabs(right.valueReal) < 0.0001)) {
+                fprintf(dest, "ERROR(line %d): the divisor is zero", line);
                 exit(1);
             }
             if (left.tag == right.tag) {
                 left.value /= right.value;
                 left.valueReal /= right.valueReal;
             }
-            else if (left.tag == NUM)  {
+            else if (left.tag == INT)  {
                 double tmp = (double)left.value;
-                left = (Token){REAL, 0, tmp / right.valueReal, NULL, false, false};
+                left = (Token){FLOAT, 0, tmp / right.valueReal, NULL, false, false};
             }
             else
                 left.valueReal /= (double)right.value;
@@ -154,12 +155,12 @@ Token factor() {
         match(')');
         return left;
     }
-    if (look->isID == true && look->tag != NUM && look->tag != REAL) {
-        fprintf(stderr, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
+    if (look->isID == true && look->tag != INT && look->tag != FLOAT) {
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
         exit(1);
     }
     if (look->isID == true && look->isAssigned == false) {
-        fprintf(stderr, "ERROR(line %d): identifier \'%s\' is unassigned", line, look->lexeme);
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is unassigned", line, look->lexeme);
         exit(1);
     }
     Token tmp = (Token){look->tag, look->value, look->valueReal, NULL, false, false};
@@ -172,7 +173,7 @@ void match(int tar) {
         Scan();
     }
     else {
-        fprintf(stderr, "ERROR(line %d): expected \'%c\'", line, (char)tar);
+        fprintf(dest, "ERROR(line %d): expected \'%c\'", line, (char)tar);
         exit(1);
     }
 }
@@ -185,7 +186,7 @@ void Assign(Token* left) {
         left->value = tmp.value;
         left->valueReal = tmp.valueReal;
     }
-    else if (left->tag = NUM)  // 左式和右式不是同一类型
+    else if (left->tag = INT)  // 左式和右式不是同一类型
         left->value = (int)tmp.valueReal;
     else
         left->valueReal = (double)tmp.value;

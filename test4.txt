@@ -1,8 +1,0 @@
-float aaa = 3.14159; 
-int bbb = 2 * aaa; 
-float ccc;
-ccc = aaa / bbb;
-write(2 * 3);
-write(aaa);
-write(bbb);
-write(ccc);.

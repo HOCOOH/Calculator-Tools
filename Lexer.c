@@ -30,7 +30,7 @@ void Scan() {
             peek++;
         } while (ISDIGIT(*peek));
         if (*peek != '.') {
-            look->tag = NUM;
+            look->tag = INT;
             look->value = val;
             return;
         }
@@ -42,7 +42,7 @@ void Scan() {
             val_r += TOVALUE(*peek) / d;
             d *= 10;
         }
-        look->tag = REAL;
+        look->tag = FLOAT;
         look->valueReal = val_r;
         return;
     }
@@ -54,13 +54,13 @@ void Scan() {
         char* ptr = buf;
         do {
             *ptr++ = *peek++;
-        } while (ISLETTER(*peek));
+        } while (ISLETTER(*peek) || ISDIGIT(*peek));
         if (strcmp(buf, "int") == 0) {
-            look->tag = INT;
+            look->tag = INT_DECL;
             free_s(buf);
         }
         else if (strcmp(buf, "float") == 0) {
-            look->tag = FLOAT;
+            look->tag = FLOAT_DECL;
             free_s(buf);
         }
         else if (strcmp(buf, "write") == 0) {
