@@ -22,19 +22,21 @@ expr → expr + term | expr - term | term
 ---------------------------------------------------------------- */
 Token expr();
 /* ----------------------------------------------------------------
-term → term * factor | term / factor | factor
+term → term * unary | term / unary | unary
 ---------------------------------------------------------------- */
 Token term();
-
-Token unary();
-
 /* ----------------------------------------------------------------
-factor → (expr) | num | real | id
+unary → - unary | factor
+---------------------------------------------------------------- */
+Token unary();
+/* ----------------------------------------------------------------
+factor → (expr) | number | id
 ---------------------------------------------------------------- */
 Token factor();
-// 匹配一个单字符Token
-void match(int tag);
+
 // left = expr ;
 void Assign(Token* left);
+// 匹配一个单字符Token
+void match(int tag);
 
 #endif

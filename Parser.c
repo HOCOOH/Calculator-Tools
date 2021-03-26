@@ -23,7 +23,7 @@ void decls() {
         int flag = look->tag;
         Scan();
         if (look->isID == false) {
-            fprintf(dest, "ERROR(line %d): expected identifier after type declaration", line);
+            fprintf(dest, "ERROR(line %d): expected identifier after type declaration.", line);
             exit(1);
         }
         if (flag == INT_DECL)
@@ -43,7 +43,7 @@ stmts → stmts stmt | ε
 stmt → id = expr ; | write ( expr ) ;
 ---------------------------------------------------------------- */
 void stmts() {
-    while (look->isID == true || look->tag == WRITE) {
+    while (true) {
         // write(id);
         if (look->tag == WRITE) {
             Scan();
@@ -58,13 +58,16 @@ void stmts() {
             continue;
         }
         // assign
-        if (look->tag != INT && look->tag != FLOAT) {
-            fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
-            exit(1);
+        if (look->isID == true) {
+            if (look->tag != INT && look->tag != FLOAT) {
+                fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.", line, look->lexeme);
+                exit(1);
+            }
+            Token* left = look;
+            Scan();
+            Assign(left);
         }
-        Token* left = look;
-        Scan();
-        Assign(left);
+        else return;
     }
 }
 /* ----------------------------------------------------------------
@@ -128,7 +131,7 @@ Token term() {
             match('/');
             Token right = unary();
             if ((right.tag == INT && right.value == 0) || (right.tag == FLOAT && fabs(right.valueReal) < 0.0001)) {
-                fprintf(dest, "ERROR(line %d): the divisor is zero", line);
+                fprintf(dest, "ERROR(line %d): the divisor is zero.", line);
                 exit(1);
             }
             if (left.tag == right.tag) {
@@ -163,7 +166,7 @@ Token unary() {
     }
 }
 /* ----------------------------------------------------------------
-factor → (expr) | num | real | id
+factor → (expr) | number | id
 ---------------------------------------------------------------- */
 Token factor() {
     if (look->tag == '(') {
@@ -173,28 +176,17 @@ Token factor() {
         return left;
     }
     if (look->isID == true && look->tag != INT && look->tag != FLOAT) {
-        fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared", line, look->lexeme);
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.", line, look->lexeme);
         exit(1);
     }
     if (look->isID == true && look->isAssigned == false) {
-        fprintf(dest, "ERROR(line %d): identifier \'%s\' is unassigned", line, look->lexeme);
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is unassigned.", line, look->lexeme);
         exit(1);
     }
     Token tmp = (Token){look->tag, look->value, look->valueReal, NULL, false, false};
     Scan();
     return tmp;
 }
-// 匹配一个单字符Token
-void match(int tar) {
-    if (tar == look->tag) {
-        Scan();
-    }
-    else {
-        fprintf(dest, "ERROR(line %d): expected \'%c\'", line, (char)tar);
-        exit(1);
-    }
-}
-
 // left = expr ;
 void Assign(Token* left) {
     match('=');
@@ -209,4 +201,14 @@ void Assign(Token* left) {
         left->valueReal = (double)tmp.value;
     left->isAssigned = true;
     match(';');
+}
+// 匹配一个单字符Token
+void match(int tar) {
+    if (tar == look->tag) {
+        Scan();
+    }
+    else {
+        fprintf(dest, "ERROR(line %d): expected \'%c\'.", line, (char)tar);
+        exit(1);
+    }
 }

@@ -10,7 +10,6 @@ extern Token* look;
 extern IdTable ids;
 
 int main(int argc, char* argv[]) {
-    /*
     if (argc != 3) {
         printf("Usage: %s inputfile outputfile", argv[0]);
         exit(1);
@@ -20,15 +19,6 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
     if ((dest = fopen(argv[2], "w")) == NULL) {
-        fprintf(stderr, "ERROR: Failed to open file \'%s\'\n", argv[2]);
-        exit(1);
-    }
-    */
-    if ((src = fopen("../test/test5.txt", "r")) == NULL) {
-        fprintf(stderr, "ERROR: Failed to open file \'%s\'\n", argv[1]);
-        exit(1);
-    }
-    if ((dest = fopen("../test/out5.txt", "w")) == NULL) {
         fprintf(stderr, "ERROR: Failed to open file \'%s\'\n", argv[2]);
         exit(1);
     }

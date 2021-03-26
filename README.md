@@ -22,6 +22,10 @@ Homework of course: Compilers Principles
 2. 支持在变量声明时同时进行初始化，如`int a = 2;`。
 3. 输出语句write()支持输出表达式，如`write(a * 2 + 3);`。
 
+### 错误处理
+
+当发现某一行出现错误时，跳过该行的所有语句，并尝试执行剩余的语句。
+
 ## 二、文法设计
 
 ### 语法
@@ -42,19 +46,27 @@ term → term * unary | term / unary | unary
 
 unary → - unary | factor
 
-factor → (expr) | **num** | **real** | **id**
+factor → (expr) | **number** | **id**
 
 ### 词法
 
-letter → [A-Za-z]
-
 digit → [0-9]
 
-id → letter(letter|digit)*
+digits → digit+
 
-number → 
+number → digits (. digits)?
+
+letter → [A-Za-z]
+
+id → letter (letter|digit)*
+
+type → int|float
+
+write → write
 
 ## 三、语法制导翻译方案
+
+在语法分析阶段使用自顶向下分析方法，设计语法制导翻译方案如下：
 
 program → decls stmts .
 
@@ -68,39 +80,45 @@ stmt → **id** = expr ; | **write** ( expr ) ;
 
 expr → expr + term | expr - term | term
 
-term → term * factor | term / factor | factor
+term → term * unary | term / unary | unary
 
-factor → (expr) | **num** | **real** | **id**
+unary → - unary | factor
 
-
-
-
-
-消除左递归：
-
-decls → decl r1
-
-r1 → decl | ε
+factor → (expr) | **number** | **id**
 
 
 
-expr → term r1
+在程序设计实现时使用以下转换式消除左递归：
 
-r1 → + term | - term | ε
+A → Aα | Aβ | γ
+
+转换为
+
+A → γR
+
+R → αR | βR | ε
 
 ## 四、测试样例
 
+测试样例与结果输出全部位于test目录下，测试样例储存在test\*.txt，输出结果储存在out\*.txt。
+
+### test1
+
 ```c
 Input 1:
-float a; int b; 
+float a;
+int b; 
 a = (10.44*356+1.28) / 2 + 1024 * 1.6;
 b = a * 2 - a/2;
 write(b);
 write(a);.
+
 Output 1:
-   8743.4
-   3497
+5246
+3497.360000
 ```
+
+### test2
 
 ```c
 Input 2:
@@ -112,8 +130,6 @@ write(b);.
 Output 2:
    Error(line 4): undefined identifier . 
 ```
-
-1. 
 
 
 
