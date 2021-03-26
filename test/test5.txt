@@ -1,0 +1,5 @@
+float xyz123 = -98.12345;
+int q1q2q3;
+q1q2q3 = xyz123 * (--(-1234)) + 1;
+write(xyz123 * 2);
+write(q1q2q3);.

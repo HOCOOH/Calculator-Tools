@@ -24,6 +24,8 @@ Homework of course: Compilers Principles
 
 ## 二、文法设计
 
+### 语法
+
 program → decls stmts .
 
 decls → decls decl | ε
@@ -36,9 +38,21 @@ stmt → **id** = expr ; | **write** ( expr ) ;
 
 expr → expr + term | expr - term | term
 
-term → term * factor | term / factor | factor
+term → term * unary | term / unary | unary
+
+unary → - unary | factor
 
 factor → (expr) | **num** | **real** | **id**
+
+### 词法
+
+letter → [A-Za-z]
+
+digit → [0-9]
+
+id → letter(letter|digit)*
+
+number → 
 
 ## 三、语法制导翻译方案
 

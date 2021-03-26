@@ -108,11 +108,11 @@ Token expr() {
 term → term * factor | term / factor | factor
 ---------------------------------------------------------------- */
 Token term() {
-    Token left = factor();
+    Token left = unary();
     while (true) {
         if (look->tag == '*') {
             match('*');
-            Token right = factor();
+            Token right = unary();
             if (left.tag == right.tag) {
                 left.value *= right.value;
                 left.valueReal *= right.valueReal;
@@ -126,7 +126,7 @@ Token term() {
         }
         else if (look->tag == '/') {
             match('/');
-            Token right = factor();
+            Token right = unary();
             if ((right.tag == INT && right.value == 0) || (right.tag == FLOAT && fabs(right.valueReal) < 0.0001)) {
                 fprintf(dest, "ERROR(line %d): the divisor is zero", line);
                 exit(1);
@@ -143,6 +143,23 @@ Token term() {
                 left.valueReal /= (double)right.value;
         }
         else return left;
+    }
+}
+/* ----------------------------------------------------------------
+unary → - unary | factor
+---------------------------------------------------------------- */
+Token unary() {
+    int flag = 1;
+    while (true) {
+        if (look->tag == '-') {
+            match('-');
+            flag *= -1;
+            continue;
+        }
+        Token tmp = factor();
+        tmp.value *= flag;
+        tmp.valueReal *= flag;
+        return tmp;
     }
 }
 /* ----------------------------------------------------------------
