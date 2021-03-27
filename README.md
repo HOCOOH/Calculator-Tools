@@ -24,7 +24,7 @@ Homework of course: Compilers Principles
 
 ### 错误处理
 
-当发现某一行出现错误时，跳过该行的所有语句，并尝试执行剩余的语句。
+当发现某一行出现错误时，
 
 ## 二、文法设计
 
@@ -72,7 +72,7 @@ program → decls stmts .
 
 decls → decls decl | ε
 
-decl → **type** **id** ; | **type** **id**  = expr ; 
+decl → **type** **id** ; {} | **type** **id**  = expr ; 
 
 stmts → stmts stmt | ε
 
@@ -84,7 +84,7 @@ term → term * unary | term / unary | unary
 
 unary → - unary | factor
 
-factor → (expr) | **number** | **id**
+factor → (expr) | **number** | **id** {return }
 
 
 

@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.9.0)
 project(Calculator-Tools)
 
 # 查找当前目录下的所有源文件并将名称保存到 DIR_SRCS 变量
-aux_source_directory(. DIR_SRCS)
+# aux_source_directory(. DIR_SRCS)
 
 # 指定生成目标
-add_executable(Calculator ${DIR_SRCS})
+add_executable(Calculator main.c Lexer.c Parser.c)

@@ -23,12 +23,12 @@ void Scan() {
     *look = (Token){0, 0, 0.0, NULL, false, false};
 
     // 处理数字
-    if (ISDIGIT(*peek)) {
+    if (IsDigit(*peek)) {
         int val = 0;
         do {
-            val  = 10 * val + TOVALUE(*peek);
+            val  = 10 * val + ToValue(*peek);
             peek++;
-        } while (ISDIGIT(*peek));
+        } while (IsDigit(*peek));
         if (*peek != '.') {
             look->tag = INT;
             look->value = val;
@@ -37,9 +37,9 @@ void Scan() {
         double val_r = val, d = 10;
         while (true) {
             peek++;
-            if (!ISDIGIT(*peek))
+            if (!IsDigit(*peek))
                 break;
-            val_r += TOVALUE(*peek) / d;
+            val_r += ToValue(*peek) / d;
             d *= 10;
         }
         look->tag = FLOAT;
@@ -48,13 +48,13 @@ void Scan() {
     }
 
     // 处理标识符及其他字母字符串
-    if (ISLETTER(*peek)) {
+    if (IsLetter(*peek)) {
         char* buf = (char*)calloc(BUF_SIZE, sizeof(char));
         CheckAllocation(buf);
         char* ptr = buf;
         do {
             *ptr++ = *peek++;
-        } while (ISLETTER(*peek) || ISDIGIT(*peek));
+        } while (IsLetter(*peek) || IsDigit(*peek));
         if (strcmp(buf, "int") == 0) {
             look->tag = INT_DECL;
             free_s(buf);
