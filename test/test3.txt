@@ -1,10 +1,12 @@
-float assign;
+float qwe123;
 int ppp;
-assign = 6 + 2.33 * 1.11 - (2 * 3 + 4);
-write(assign);
-ppp = assign + 5;
+qwe123 = 6 + 2.33 * 1.11 - (26817 * 3.12345 + 4);
+write(qwe123);
+ppp = qwe123 + 5;
 write(ppp);
-ppp = 2 * 33;
+ppp = 2 * 33.001;
 write(ppp);
 write(123);
-ppp = 2 / 0.0;
+qwe123 = 0.0;
+ppp = 2 / qwe123;
+write(ppp);.

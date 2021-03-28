@@ -1,4 +1,4 @@
-6
 3.141590
-6
-0.523598
+-1006
+-0.003123
+ERROR(line 9): identifier 'undef' is unassigned.

@@ -23,7 +23,7 @@ void decls() {
         int flag = look->tag;
         Scan();
         if (look->isID == false) {
-            fprintf(dest, "ERROR(line %d): expected identifier after type declaration.", line);
+            fprintf(dest, "ERROR(line %d): expected identifier after type declaration.\n", line);
             exit(1);
         }
         if (flag == INT_DECL)
@@ -60,7 +60,7 @@ void stmts() {
         // assign
         if (look->isID == true) {
             if (look->tag != INT && look->tag != FLOAT) {
-                fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.", line, look->lexeme);
+                fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.\n", line, look->lexeme);
                 exit(1);
             }
             Token* left = look;
@@ -83,7 +83,7 @@ Token expr() {
                 left.value += right.value;
                 left.valueReal += right.valueReal;
             }
-            else if (left.tag == INT)  {
+            else if (left.tag == INT)  {  // 相同类型
                 double tmp = (double)left.value;
                 left = (Token){FLOAT, 0, tmp + right.valueReal, NULL, false, false};
             }
@@ -131,7 +131,7 @@ Token term() {
             match('/');
             Token right = unary();
             if ((right.tag == INT && right.value == 0) || (right.tag == FLOAT && fabs(right.valueReal) < 0.0001)) {
-                fprintf(dest, "ERROR(line %d): the divisor is zero.", line);
+                fprintf(dest, "ERROR(line %d): the divisor is zero.\n", line);
                 exit(1);
             }
             if (left.tag == right.tag) {
@@ -176,11 +176,11 @@ Token factor() {
         return left;
     }
     if (look->isID == true && look->tag != INT && look->tag != FLOAT) {
-        fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.", line, look->lexeme);
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is undeclared.\n", line, look->lexeme);
         exit(1);
     }
     if (look->isID == true && look->isAssigned == false) {
-        fprintf(dest, "ERROR(line %d): identifier \'%s\' is unassigned.", line, look->lexeme);
+        fprintf(dest, "ERROR(line %d): identifier \'%s\' is unassigned.\n", line, look->lexeme);
         exit(1);
     }
     Token tmp = (Token){look->tag, look->value, look->valueReal, NULL, false, false};
@@ -208,7 +208,7 @@ void match(int tar) {
         Scan();
     }
     else {
-        fprintf(dest, "ERROR(line %d): expected \'%c\'.", line, (char)tar);
+        fprintf(dest, "ERROR(line %d): expected \'%c\'.\n", line, (char)tar);
         exit(1);
     }
 }

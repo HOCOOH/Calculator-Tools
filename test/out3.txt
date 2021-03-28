@@ -1,5 +1,5 @@
--1.413700
-3
+-83756.972350
+-83751
 66
 123
-ERROR(line 10): the divisor is zero
+ERROR(line 11): the divisor is zero.

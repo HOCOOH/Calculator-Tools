@@ -1,1 +1,1 @@
-ERROR(line 4): identifier 'c' is undeclared
+ERROR(line 4): identifier 'c' is undeclared.
